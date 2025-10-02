@@ -6,6 +6,7 @@ const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
 const quizRoutes = require("./routes/quizRoutes");
+const quizAttemptRoutes = require("./routes/quizAttemptRoutes");
 
 // Connect Database
 connectDB();
@@ -22,6 +23,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/uploads", uploadRoutes);
 app.use("/api/quiz", quizRoutes);
+app.use("/api/quiz", quizAttemptRoutes);
 
 
 const PORT = process.env.PORT || 5000;
