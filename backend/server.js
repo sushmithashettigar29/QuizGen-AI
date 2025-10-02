@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 const connectDB = require("./config/db");
+
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
@@ -19,12 +20,12 @@ app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
+// Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/uploads", uploadRoutes);
-app.use("/api/quiz", quizRoutes);
-app.use("/api/quiz", quizAttemptRoutes);
-
+app.use("/api/quizzes", quizRoutes); // all quiz management
+app.use("/api/quiz-attempts", quizAttemptRoutes); // quiz attempts separate
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

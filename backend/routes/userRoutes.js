@@ -1,9 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const { protect } = require("../middleware/authMiddleware");
-const { getUserProfile } = require("../controllers/userController");
+const { getUserProfile, getUserAttempts, getLeaderboard } = require("../controllers/userController");
 
-// Profile route
+// Get logged-in user's profile and stats
 router.get("/profile", protect, getUserProfile);
+
+// Get quiz attempts of logged-in user
+router.get("/attempts", protect, getUserAttempts);
+
+// Leaderboard (public)
+router.get("/leaderboard", getLeaderboard);
 
 module.exports = router;
