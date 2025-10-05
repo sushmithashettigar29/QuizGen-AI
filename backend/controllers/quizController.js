@@ -7,8 +7,9 @@ const ai = new GoogleGenAI({}); // GEMINI_API_KEY from .env
 // -------------------- Generate Quiz --------------------
 exports.generateQuiz = async (req, res) => {
   try {
-    const { extractedText } = req.body;
-    if (!extractedText) return res.status(400).json({ message: "No text provided" });
+    const { extractedText, fileName } = req.body; // 👈 also accept fileName
+    if (!extractedText)
+      return res.status(400).json({ message: "No text provided" });
 
     // Send text to Gemini API
     const response = await ai.models.generateContent({
@@ -25,7 +26,10 @@ exports.generateQuiz = async (req, res) => {
     });
 
     // Clean AI output
-    let cleanedText = response.text.replace(/```json/g, "").replace(/```/g, "").trim();
+    let cleanedText = response.text
+      .replace(/```json/g, "")
+      .replace(/```/g, "")
+      .trim();
 
     let quizJSON;
     try {
@@ -33,12 +37,14 @@ exports.generateQuiz = async (req, res) => {
     } catch (err) {
       console.error("Error parsing Gemini output:", err);
       console.log("Raw AI output:", response.text);
-      return res.status(500).json({ message: "Failed to parse quiz JSON from Gemini" });
+      return res
+        .status(500)
+        .json({ message: "Failed to parse quiz JSON from Gemini" });
     }
 
     // Filter only valid questions
     const validQuestions = quizJSON.filter(
-      q =>
+      (q) =>
         q.question &&
         Array.isArray(q.options) &&
         q.options.length === 4 &&
@@ -46,11 +52,14 @@ exports.generateQuiz = async (req, res) => {
     );
 
     if (validQuestions.length === 0)
-      return res.status(500).json({ message: "No valid questions returned from AI" });
+      return res
+        .status(500)
+        .json({ message: "No valid questions returned from AI" });
 
-    // Save quiz
+    // Save quiz with title = uploaded file name (fallback: Untitled Quiz)
     const newQuiz = await Quiz.create({
       user: req.user._id,
+      title: fileName || "Untitled Quiz", // 👈 added title
       questions: validQuestions,
       createdAt: new Date(),
     });
@@ -78,8 +87,10 @@ exports.attemptQuiz = async (req, res) => {
     if (!quiz) return res.status(404).json({ message: "Quiz not found" });
 
     let score = 0;
-    const detailedResults = quiz.questions.map(q => {
-      const userAnswerObj = answers.find(a => a.questionId === q._id.toString());
+    const detailedResults = quiz.questions.map((q) => {
+      const userAnswerObj = answers.find(
+        (a) => a.questionId === q._id.toString()
+      );
       const userAnswer = userAnswerObj ? userAnswerObj.answer.trim() : null;
       const isCorrect = userAnswer === q.answer.trim();
 
@@ -121,7 +132,9 @@ exports.attemptQuiz = async (req, res) => {
 // -------------------- Get My Quizzes --------------------
 exports.getMyQuizzes = async (req, res) => {
   try {
-    const quizzes = await Quiz.find({ user: req.user._id }).sort({ createdAt: -1 });
+    const quizzes = await Quiz.find({ user: req.user._id }).sort({
+      createdAt: -1,
+    });
     res.json(quizzes);
   } catch (err) {
     console.error(err);

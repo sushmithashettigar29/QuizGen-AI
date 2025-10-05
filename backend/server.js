@@ -8,6 +8,7 @@ const userRoutes = require("./routes/userRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
 const quizRoutes = require("./routes/quizRoutes");
 const quizAttemptRoutes = require("./routes/quizAttemptRoutes");
+const statsRoutes = require("./routes/statsRoutes");
 
 // Connect Database
 connectDB();
@@ -26,6 +27,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/uploads", uploadRoutes);
 app.use("/api/quizzes", quizRoutes); // all quiz management
 app.use("/api/quiz-attempts", quizAttemptRoutes); // quiz attempts separate
+app.use("/api/stats", statsRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

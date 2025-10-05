@@ -22,8 +22,10 @@ const storage = multer.diskStorage({
 
 // File filter
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = ["application/pdf", 
-                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+  const allowedTypes = [
+    "application/pdf",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  ];
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
@@ -47,18 +49,23 @@ const uploadDocument = async (req, res) => {
         const dataBuffer = fs.readFileSync(filePath);
         const pdfData = await pdfParse(dataBuffer);
         text = pdfData.text;
-      } else if (req.file.mimetype === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+      } else if (
+        req.file.mimetype ===
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      ) {
         const result = await mammoth.extractRawText({ path: filePath });
         text = result.value;
       }
 
       // Increment documentsUploaded in user profile
-      await User.findByIdAndUpdate(req.user._id, { $inc: { documentsUploaded: 1 } });
+      await User.findByIdAndUpdate(req.user._id, {
+        $inc: { documentsUploaded: 1 },
+      });
 
       res.json({
         message: "File uploaded and text extracted successfully",
         extractedText: text,
-        fileName: req.file.filename,
+        fileName: req.file.originalname,
       });
     } catch (error) {
       console.error(error);
