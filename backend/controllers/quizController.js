@@ -8,6 +8,8 @@ const ai = new GoogleGenAI({}); // GEMINI_API_KEY from .env
 exports.generateQuiz = async (req, res) => {
   try {
     const { extractedText, fileName } = req.body; // 👈 also accept fileName
+    console.log("📘 Received generateQuiz request with fileName:", fileName);
+
     if (!extractedText)
       return res.status(400).json({ message: "No text provided" });
 

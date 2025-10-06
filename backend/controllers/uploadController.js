@@ -62,10 +62,15 @@ const uploadDocument = async (req, res) => {
         $inc: { documentsUploaded: 1 },
       });
 
+      const originalName = req.file.originalname;
+      const safeFileName = path.basename(originalName);
+
+      console.log("📁 Uploaded file:", safeFileName);
+
       res.json({
         message: "File uploaded and text extracted successfully",
         extractedText: text,
-        fileName: req.file.originalname,
+        fileName: safeFileName,
       });
     } catch (error) {
       console.error(error);

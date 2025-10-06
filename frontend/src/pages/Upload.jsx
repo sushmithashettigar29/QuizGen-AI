@@ -58,7 +58,7 @@ export default function Upload() {
           },
           body: JSON.stringify({
             extractedText: uploadData.extractedText,
-            fileName: uploadData.fileName || file.name, // 👈 ensure filename is sent
+            fileName: uploadData.fileName || file.name,
           }),
         }
       );
