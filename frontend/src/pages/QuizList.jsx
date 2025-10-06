@@ -27,11 +27,8 @@ function QuizList() {
       <ul>
         {quizzes.map((quiz) => (
           <li key={quiz._id} className="mb-2">
-            {quiz.title || "Untitled Quiz"}{" "}
-            <Link
-              to={`/quiz/${quiz._id}`}
-              className="text-blue-600 underline"
-            >
+            {quiz.title || "Untitled Quiz"} - {quiz.createdAt || "Date not found"} - 
+            <Link to={`/quiz/${quiz._id}`} className="text-blue-600 underline">
               Attempt
             </Link>
           </li>
