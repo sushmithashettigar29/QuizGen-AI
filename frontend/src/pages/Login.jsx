@@ -19,7 +19,7 @@ export default function Login({ onLogin }) {
       const res = await API.post("/auth/login", form);
       localStorage.setItem("token", res.data.token);
       onLogin(); // <- Notify Navbar to update
-      navigate("/dashboard");
+      navigate("/");
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
     } finally {

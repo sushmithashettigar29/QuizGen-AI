@@ -56,10 +56,14 @@ exports.generateQuiz = async (req, res) => {
         .status(500)
         .json({ message: "No valid questions returned from AI" });
 
-    // Save quiz with title = uploaded file name (fallback: Untitled Quiz)
+    // inside generateQuiz
+    const cleanTitle = fileName
+      ? fileName.replace(/\.[^/.]+$/, "")
+      : "Untitled Quiz";
+
     const newQuiz = await Quiz.create({
       user: req.user._id,
-      title: fileName || "Untitled Quiz", // 👈 added title
+      title: cleanTitle, // 👈 now saves "biology" not "biology.pdf"
       questions: validQuestions,
       createdAt: new Date(),
     });

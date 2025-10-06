@@ -19,12 +19,6 @@ function Hero() {
           >
             Upload & Generate Quiz
           </Link>
-          <Link
-            to="/leaderboard"
-            className="bg-transparent border-2 border-white text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:bg-white hover:text-violet-700 transition transform hover:scale-105"
-          >
-            Check Leaderboard
-          </Link>
         </div>
       </div>
     </section>

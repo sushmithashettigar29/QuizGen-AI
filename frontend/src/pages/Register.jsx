@@ -20,7 +20,7 @@ export default function Register({ onLogin }) {
       const res = await API.post("/auth/register", form);
       localStorage.setItem("token", res.data.token);
       onLogin(); // <- notify Navbar
-      navigate("/dashboard");
+      navigate("/");
     } catch (err) {
       setError(err.response?.data?.message || "Registration failed");
     } finally {

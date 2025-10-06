@@ -10,10 +10,11 @@ import QuizList from "./pages/QuizList";
 import Leaderboard from "./pages/Leaderboard";
 import Attempts from "./pages/Attempts";
 import Navbar from "./components/Navbar";
+import { useNavigate } from "react-router-dom";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+  const navigate = useNavigate();
   // Check token on app load
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -23,6 +24,7 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
+    navigate("/");
   };
 
   const handleLogin = () => {
