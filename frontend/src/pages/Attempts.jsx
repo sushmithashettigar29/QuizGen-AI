@@ -40,7 +40,7 @@ function Attempts() {
           <tbody>
             {attempts.map((a) => (
               <tr key={a._id} className="border-b">
-                <td className="py-2">{a.quiz.title || "Untitled Quiz"}</td>
+                <td className="py-2">{a.title || "Untitled Quiz"}</td>
                 <td className="py-2">{a.score}</td>
                 <td className="py-2">
                   {new Date(a.createdAt).toLocaleString()}
