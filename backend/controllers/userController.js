@@ -34,16 +34,30 @@ exports.getUserProfile = async (req, res) => {
   }
 };
 
-// Get all attempts by logged-in user
+// Get all attempts by logged-in user (with quiz details)
 exports.getUserAttempts = async (req, res) => {
   try {
     const attempts = await QuizAttempt.find({ user: req.user._id })
-      .populate("quiz", "questions createdAt")
+      .populate("quiz", "title questions createdAt") // ✅ include title
       .sort({ date: -1 });
 
-    res.json(attempts);
+    // ✅ Format the response for front-end
+    const formattedAttempts = attempts.map((a) => ({
+      _id: a._id,
+      quizId: a.quiz?._id || null,
+      title: a.quiz?.title || "Untitled Quiz",
+      score: a.score,
+      totalQuestions: a.quiz?.questions?.length || 0,
+      percentage:
+        a.quiz?.questions?.length > 0
+          ? Math.round((a.score / a.quiz.questions.length) * 100)
+          : 0,
+      date: a.date || a.quiz?.createdAt,
+    }));
+
+    res.json(formattedAttempts);
   } catch (err) {
-    console.error(err);
+    console.error("❌ Error fetching attempts:", err);
     res.status(500).json({ message: "Server error fetching attempts" });
   }
 };
