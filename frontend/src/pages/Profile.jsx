@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import API from "../api/axios";
 
 export default function Profile() {
@@ -21,82 +20,82 @@ export default function Profile() {
     fetchProfile();
   }, []);
 
-  if (loading) return <p className="p-4">Loading profile...</p>;
-  if (error) return <p className="text-red-500 p-4">{error}</p>;
+  const StatCard = ({ title, value }) => (
+    <div className="p-5 bg-white rounded-xl shadow-lg border border-indigo-100 transition duration-300 hover:shadow-xl hover:translate-y-[-2px]">
+      <h2 className="text-sm font-semibold text-gray-500 capitalize tracking-wider mb-1 text-center">
+        {title}
+      </h2>
+      <p className="text-3xl font-extrabold text-indigo-700 text-center">{value}</p>
+    </div>
+  );
+
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-48">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-500"></div>
+        <p className="ml-4 text-indigo-700">Loading profile...</p>
+      </div>
+    );
+
+  if (error)
+    return (
+      <div className="max-w-xl mx-auto p-6 bg-red-100 border border-red-400 text-red-700 rounded-xl mt-10">
+        <p className="font-semibold">Error Loading Profile:</p>
+        <p>{error}</p>
+      </div>
+    );
 
   return (
-    <div className="max-w-5xl mx-auto p-6 space-y-6">
-      <h1 className="text-3xl font-bold">Profile & Dashboard</h1>
-      <p className="text-gray-600">Welcome back, {user?.name}!</p>
-
-      {/* User Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        <div className="p-4 bg-white rounded-lg shadow text-center">
-          <h2 className="text-lg font-semibold">Documents Uploaded</h2>
-          <p className="text-2xl font-bold">{user?.documentsUploaded}</p>
-        </div>
-        <div className="p-4 bg-white rounded-lg shadow text-center">
-          <h2 className="text-lg font-semibold">Quizzes Generated</h2>
-          <p className="text-2xl font-bold">{user?.quizzesGenerated}</p>
-        </div>
-        <div className="p-4 bg-white rounded-lg shadow text-center">
-          <h2 className="text-lg font-semibold">Quizzes Attempted</h2>
-          <p className="text-2xl font-bold">{user?.quizzesAttempted}</p>
-        </div>
-        <div className="p-4 bg-white rounded-lg shadow text-center">
-          <h2 className="text-lg font-semibold">Total Score</h2>
-          <p className="text-2xl font-bold">{user?.totalScore}</p>
-        </div>
-        <div className="p-4 bg-white rounded-lg shadow text-center">
-          <h2 className="text-lg font-semibold">Average Score</h2>
-          <p className="text-2xl font-bold">{user?.averageScore.toFixed(2)}</p>
-        </div>
+    <div className="max-w-6xl mx-auto p-4 md:p-8 space-y-10">
+      {/* Header and Welcome */}
+      <div className="text-center md:text-left border-b border-indigo-200 pb-4">
+        <h1 className="text-4xl font-extrabold text-gray-800">
+          Your Dashboard
+        </h1>
+        <p className="text-xl text-indigo-600 mt-1">
+          Welcome back, <span className="font-semibold">{user?.name}</span>!
+        </p>
       </div>
 
-      {/* Quick Links / Actions */}
-      <div className="p-4 bg-white rounded-lg shadow space-y-4">
-        <h2 className="text-xl font-semibold mb-2">Quick Actions</h2>
-        <div className="flex flex-col sm:flex-row gap-4">
-          <Link
-            to="/upload"
-            className="flex-1 text-center bg-blue-500 text-white px-4 py-3 rounded hover:bg-blue-600 transition"
-          >
-            Upload Document & Generate Quiz
-          </Link>
-          <Link
-            to="/my-quizzes"
-            className="flex-1 text-center bg-green-500 text-white px-4 py-3 rounded hover:bg-green-600 transition"
-          >
-            My Quizzes
-          </Link>
-          <Link
-            to="/attempts"
-            className="flex-1 text-center bg-yellow-500 text-white px-4 py-3 rounded hover:bg-yellow-600 transition"
-          >
-            Attempt History
-          </Link>
-          <Link
-            to="/leaderboard"
-            className="flex-1 text-center bg-purple-500 text-white px-4 py-3 rounded hover:bg-purple-600 transition"
-          >
-            Leaderboard
-          </Link>
-        </div>
-      </div>
-
-      {/* Optional Detailed Profile Info */}
-      <div className="p-4 bg-white rounded-lg shadow space-y-2">
-        <h2 className="text-xl font-semibold mb-2">Profile Details</h2>
-        <p>
-          <strong>Name:</strong> {user?.name}
+      {/* Detailed Profile Info */}
+      <div className="w-full p-6 bg-white rounded-2xl shadow-lg space-y-3">
+        <h2 className="text-2xl font-bold text-gray-700 mb-3 pb-2">
+          Account Details
+        </h2>
+        <p className="text-gray-600">
+          <strong className="text-gray-800 w-24 inline-block">Name:</strong>{" "}
+          {user?.name}
         </p>
-        <p>
-          <strong>Email:</strong> {user?.email}
+        <p className="text-gray-600">
+          <strong className="text-gray-800 w-24 inline-block">Email:</strong>{" "}
+          {user?.email}
         </p>
-        <p>
-          <strong>Joined:</strong>{" "}
+        <p className="text-gray-600">
+          <strong className="text-gray-800 w-24 inline-block">Joined:</strong>{" "}
           {new Date(user?.createdAt).toLocaleDateString()}
         </p>
+      </div>
+
+      {/* User Stats Grid */}
+      <div>
+        <h2 className="text-2xl font-bold text-gray-700 mb-6">
+          Learning Metrics
+        </h2>
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-6">
+          <StatCard
+            title="Documents Uploaded"
+            value={user?.documentsUploaded}
+          />
+          <StatCard title="Quizzes Generated" value={user?.quizzesGenerated} />
+          <StatCard title="Quizzes Attempted" value={user?.quizzesAttempted} />
+          <StatCard title="Total Score" value={user?.totalScore} />
+          <StatCard
+            title="Average Score"
+            value={
+              user?.averageScore ? `${user.averageScore.toFixed(2)}%` : "N/A"
+            }
+          />
+        </div>
       </div>
     </div>
   );
